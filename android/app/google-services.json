@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "174407953593",
+    "project_id": "kafecraft-exam",
+    "storage_bucket": "kafecraft-exam.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174407953593:android:8481f91660b03bccf2bf68",
+        "android_client_info": {
+          "package_name": "com.example.kafecraft_exam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4CaN-JHgRQeR0vrbfCoYjAn4ze0q4tRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
