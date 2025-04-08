@@ -18,7 +18,7 @@ class FieldPage extends HookConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             'Champ: ${field.name}',
@@ -34,10 +34,19 @@ class FieldPage extends HookConsumerWidget {
               },
             ),
           ),
-          ElevatedButton.icon(
-            onPressed: () => context.go("/farme"),
-            icon: const Icon(Icons.arrow_back),
-            label: const Text('Retour'),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () => context.go("/farme"),
+              icon: const Icon(Icons.arrow_back),
+              label: const Text('Retour'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16), // Coins arrondis
+                ),
+              ),
+            ),
           ),
         ],
       ),

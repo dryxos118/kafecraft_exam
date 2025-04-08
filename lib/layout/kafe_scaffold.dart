@@ -31,6 +31,7 @@ class KafeScaffold extends HookConsumerWidget {
       appBar: KafeAppBar(onLogoutPressed: () => onLoginPressed()),
       bottomNavigationBar: const KafeBottomNavigation(),
       body: body,
+      backgroundColor: const Color(0xfffe6dbcb),
     );
   }
 }

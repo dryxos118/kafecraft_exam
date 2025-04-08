@@ -31,7 +31,7 @@ class PlayerNotifier extends StateNotifier<Player?> {
   Future<void> createNewUser(Player user) async {
     try {
       var test = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('players')
           .add(user.toMap());
       state = user.copyWith(id: test.id);
     } catch (e) {
@@ -46,7 +46,7 @@ class PlayerNotifier extends StateNotifier<Player?> {
           .login(email: email, password: password);
       if (userCredential != null && userCredential.user != null) {
         final snapshot = await FirebaseFirestore.instance
-            .collection('users')
+            .collection('players')
             .where("email", isEqualTo: email)
             .get();
         state = Player.fromMap(snapshot.docs.first.data());
@@ -67,5 +67,45 @@ class PlayerNotifier extends StateNotifier<Player?> {
       print(error);
     }
     return false;
+  }
+
+  Future<bool> addOrRemoveDeeVee(int deeVee, bool? remove) async {
+    final firestore = FirebaseFirestore.instance;
+
+    try {
+      int currentDeeVee = state!.deeVee;
+
+      if (remove == true && currentDeeVee < deeVee) {
+        print("Solde insuffisant pour retirer $deeVee DeeVee");
+        return false;
+      }
+
+      int updatedDeeVee =
+          remove == true ? currentDeeVee - deeVee : currentDeeVee + deeVee;
+
+      state = state!.copyWith(deeVee: updatedDeeVee);
+      await firestore
+          .collection("players")
+          .doc(state!.id)
+          .update(state!.toMap());
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<void> updatePlayerInfo(String firstName, String lastName) async {
+    final firestore = FirebaseFirestore.instance;
+
+    try {
+      state = state!.copyWith(firstName: firstName, lastName: lastName);
+      await firestore
+          .collection("players")
+          .doc(state!.id)
+          .update(state!.toMap());
+    } catch (e) {
+      print(e);
+    }
   }
 }

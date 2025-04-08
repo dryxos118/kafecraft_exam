@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kafecraft_exam/model/field.dart';
 import 'package:kafecraft_exam/provider/field_provider.dart';
+import 'package:kafecraft_exam/provider/stock_provider.dart';
 import 'package:kafecraft_exam/provider/time_provider.dart';
 import 'package:kafecraft_exam/service/snackbar_service.dart';
 import 'package:kafecraft_exam/widget/field/add_plant_dialog.dart';
@@ -16,7 +17,7 @@ class FieldActionButton extends HookConsumerWidget {
     required this.field,
   });
 
-  void _addPlant(BuildContext context, WidgetRef ref) {
+  void addPlant(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (context) => AddPlantDialog(
@@ -26,8 +27,10 @@ class FieldActionButton extends HookConsumerWidget {
     );
   }
 
-  void _harvestPlant(BuildContext context, WidgetRef ref) {
+  void harvestPlant(BuildContext context, WidgetRef ref) {
+    final plant = field.plants[plantIndex];
     ref.read(selectedFieldProvider.notifier).harvestPlant(plantIndex);
+    ref.read(stockStreamProvider.notifier).addGrains(plant.cafeType!);
     SnackbarService(context).showSnackbar(
       title: 'Récolte réussie',
       type: Type.succes,
@@ -48,7 +51,7 @@ class FieldActionButton extends HookConsumerWidget {
 
     if (plant.cafeType == null) {
       return ElevatedButton.icon(
-        onPressed: () => _addPlant(context, ref),
+        onPressed: () => addPlant(context, ref),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.green,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -57,13 +60,16 @@ class FieldActionButton extends HookConsumerWidget {
           ),
         ),
         icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text('Ajouter'),
+        label: const Text(
+          'Ajouter',
+          style: TextStyle(color: Colors.white),
+        ),
       );
     }
 
     if (plant.isReadyForHarvest) {
       return ElevatedButton.icon(
-        onPressed: () => _harvestPlant(context, ref),
+        onPressed: () => harvestPlant(context, ref),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.orange,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

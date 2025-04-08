@@ -1,11 +1,10 @@
-import 'exploitation.dart';
-
 class Player {
   final String? id;
   final String? firstName;
   final String? lastName;
   final String? email;
   final int deeVee;
+  final int goldSeed;
 
   Player({
     this.id,
@@ -13,6 +12,7 @@ class Player {
     this.lastName,
     required this.email,
     this.deeVee = 10,
+    this.goldSeed = 0,
   });
 
   factory Player.fromMap(Map<String, dynamic> data) {
@@ -22,6 +22,7 @@ class Player {
       lastName: data['lastName'],
       email: data['email'],
       deeVee: data['deeVee'] ?? 10,
+      goldSeed: data['goldSeed'] ?? 0,
     );
   }
 
@@ -32,6 +33,7 @@ class Player {
       'lastName': lastName,
       'email': email,
       'deeVee': deeVee,
+      'goldSeed': goldSeed
     };
   }
 
@@ -41,7 +43,7 @@ class Player {
     String? lastName,
     String? email,
     int? deeVee,
-    Exploitation? exploitation,
+    int? goldSeed,
   }) {
     return Player(
       id: id ?? this.id,
@@ -49,6 +51,7 @@ class Player {
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
       deeVee: deeVee ?? this.deeVee,
+      goldSeed: goldSeed ?? this.goldSeed,
     );
   }
 }

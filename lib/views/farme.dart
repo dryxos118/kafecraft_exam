@@ -29,11 +29,15 @@ class Farme extends HookConsumerWidget {
           child: Row(
             children: [
               ElevatedButton(
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (context) => AddFieldDialog(ref: ref),
-                ),
-                child: const Text('Ajouter un Champs'),
+                onPressed: () => {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => const AddFieldDialog(),
+                  )
+                },
+                child: const Text('Ajouter un Champ (15 deeVee)'),
               ),
               const Spacer(),
               Chip(label: Text('${player!.deeVee} deeVee'))
@@ -42,11 +46,15 @@ class Farme extends HookConsumerWidget {
         ),
         const Divider(),
         Expanded(
-          child: exploitation == null
+          child: exploitation == null || exploitation.fields.isEmpty
               ? const Center(child: Text('Aucune exploitation trouvée.'))
               : FieldList(fields: exploitation.fields),
         ),
       ],
     );
   }
+}
+
+class AddFieldBottomSheet {
+  const AddFieldBottomSheet();
 }

@@ -16,36 +16,61 @@ class AddPlantDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return AlertDialog(
+    return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: const Text(
-        'Sélectionner une plante',
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      ),
-      content: SingleChildScrollView(
+      child: SizedBox(
+        width: double.maxFinite,
+        height: MediaQuery.of(context).size.height * 0.65,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: cafeTypes.map((cafeType) {
-            return _buildPlantCard(context, cafeType);
-          }).toList(),
+          children: [
+            // Titre fixe en haut
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'Sélectionner une plante',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const Divider(height: 1),
+
+            // Contenu défilant au centre
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: cafeTypes.map((cafeType) {
+                      return _buildPlantCard(context, cafeType);
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+
+            const Divider(height: 1),
+
+            // Bouton "Fermer" fixe en bas
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text(
+                  'Fermer',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text(
-            'Fermer',
-            style: TextStyle(color: Colors.grey, fontSize: 18),
-          ),
-        ),
-      ],
     );
   }
 
   Widget _buildPlantCard(BuildContext context, cafeType) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -56,32 +81,35 @@ class AddPlantDialog extends HookConsumerWidget {
             const SizedBox(height: 8),
             _buildMainInfoRow(cafeType),
             const SizedBox(height: 8),
-            const SizedBox(height: 12),
             Align(
-                alignment: Alignment.center,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    ref.read(selectedFieldProvider.notifier).addPlant(
-                          plantIndex,
-                          cafeType,
-                        );
-                    Navigator.of(context).pop();
-                    SnackbarService(context).showSnackbar(
-                      title: '${cafeType.name} ajouté au champ',
-                      type: Type.succes,
-                    );
-                  },
-                  icon: const Icon(Icons.check, color: Colors.white),
-                  label: const Text('Planter'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+              alignment: Alignment.center,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  ref.read(selectedFieldProvider.notifier).addPlant(
+                        plantIndex,
+                        cafeType,
+                      );
+                  Navigator.of(context).pop();
+                  SnackbarService(context).showSnackbar(
+                    title: '${cafeType.name} ajouté au champ',
+                    type: Type.succes,
+                  );
+                },
+                icon: const Icon(Icons.check, color: Colors.white),
+                label: const Text(
+                  'Planter',
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                )),
+                ),
+              ),
+            ),
           ],
         ),
       ),

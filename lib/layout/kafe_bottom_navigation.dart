@@ -31,8 +31,9 @@ class KafeBottomNavigation extends HookConsumerWidget {
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.brown.shade700,
+      selectedItemColor: Colors.brown.shade800,
       unselectedItemColor: Colors.grey,
+      backgroundColor: const Color.fromARGB(255, 229, 211, 184),
       currentIndex: currentIndex,
       onTap: onItemTapped,
       items: const <BottomNavigationBarItem>[

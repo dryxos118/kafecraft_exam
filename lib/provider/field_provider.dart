@@ -22,7 +22,6 @@ class SelectedFieldNotifier extends StateNotifier<Field?> {
     state = null;
   }
 
-  /// Ajouter une plante à l'index donné
   Future<void> addPlant(int plantIndex, CafeType cafeType) async {
     if (state == null) return;
 
@@ -37,11 +36,9 @@ class SelectedFieldNotifier extends StateNotifier<Field?> {
     Field updatedField = state!.copyWith(plants: updatedPlants);
     state = updatedField;
 
-    // Mettre à jour l'exploitation via le provider
     ref.read(exploitationProvider.notifier).updateField(updatedField);
   }
 
-  /// Récolter une plante à l'index donné
   Future<void> harvestPlant(int plantIndex) async {
     if (state == null) return;
 
@@ -51,7 +48,6 @@ class SelectedFieldNotifier extends StateNotifier<Field?> {
     Field updatedField = state!.copyWith(plants: updatedPlants);
     state = updatedField;
 
-    // Mettre à jour l'exploitation via le provider
     ref.read(exploitationProvider.notifier).updateField(updatedField);
   }
 }

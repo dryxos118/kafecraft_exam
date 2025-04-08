@@ -11,23 +11,21 @@ class FieldCard extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Récupérer la plante mise à jour via le provider
     final field = ref.watch(selectedFieldProvider);
     if (field == null) {
-      return const SizedBox(); // Retourner un widget vide si aucun champ n'est sélectionné
+      return const SizedBox();
     }
 
-    // Récupérer la plante actuelle à partir du champ sélectionné
     final plant = field.plants[index];
 
     return Card(
       elevation: 4,
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,10 +39,8 @@ class FieldCard extends HookConsumerWidget {
             ),
             Row(
               children: [
-                // Statut de la plante (géré dynamiquement)
                 FieldStatus(plant: plant),
                 const Spacer(),
-                // Bouton d'action (géré dynamiquement)
                 FieldActionButton(plantIndex: index, field: field),
               ],
             ),
