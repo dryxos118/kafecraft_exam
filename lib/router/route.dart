@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kafecraft_exam/layout/kafe_scaffold.dart';
 import 'package:kafecraft_exam/views/competition.dart';
 import 'package:kafecraft_exam/views/farme.dart';
+import 'package:kafecraft_exam/views/field_page.dart';
 import 'package:kafecraft_exam/views/login.dart';
 import 'package:kafecraft_exam/views/profile.dart';
 import 'package:kafecraft_exam/views/register.dart';
@@ -13,21 +14,30 @@ final List<GoRoute> appRoutes = [
       path: "/login",
       name: "Login",
       pageBuilder: (context, state) {
-        return _buildFadeTransitionPage(context, state, Login());
+        return _buildFadeTransitionPage(context, state, const Login());
       }),
   GoRoute(
       path: "/register",
       name: "Register",
       pageBuilder: (context, state) {
-        return _buildFadeTransitionPage(context, state, Register());
+        return _buildFadeTransitionPage(context, state, const Register());
       }),
   GoRoute(
-      path: "/farme",
-      name: "Farme",
-      pageBuilder: (context, state) {
-        return _buildFadeTransitionPage(
-            context, state, KafeScaffold(body: const Farme()));
-      }),
+    path: "/farme",
+    name: "Farme",
+    pageBuilder: (context, state) {
+      return _buildFadeTransitionPage(
+          context, state, KafeScaffold(body: const Farme()));
+    },
+  ),
+  GoRoute(
+    path: "/farme/detail",
+    name: "FieldDetail",
+    pageBuilder: (context, state) {
+      return _buildFadeTransitionPage(
+          context, state, KafeScaffold(body: const FieldPage()));
+    },
+  ),
   GoRoute(
       path: "/stock",
       name: "Stock",
@@ -51,6 +61,10 @@ final List<GoRoute> appRoutes = [
     },
   )
 ];
+
+extension on GoRouterState {
+  get params => null;
+}
 
 Page _buildFadeTransitionPage(
     BuildContext context, GoRouterState state, Widget child) {

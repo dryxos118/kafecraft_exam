@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kafecraft_exam/provider/exploitation_provider.dart';
 import 'package:kafecraft_exam/provider/player_provider.dart';
-import 'package:kafecraft_exam/widget/farme/add_exploitation_dialog.dart';
+import 'package:kafecraft_exam/widget/farme/add_field_dialog.dart';
 import 'package:kafecraft_exam/widget/farme/field_list.dart';
 
 class Farme extends HookConsumerWidget {
@@ -31,9 +31,9 @@ class Farme extends HookConsumerWidget {
               ElevatedButton(
                 onPressed: () => showDialog(
                   context: context,
-                  builder: (context) => AddExploitationDialog(ref: ref),
+                  builder: (context) => AddFieldDialog(ref: ref),
                 ),
-                child: const Text('Ajouter une exploitation'),
+                child: const Text('Ajouter un Champs'),
               ),
               const Spacer(),
               Chip(label: Text('${player!.deeVee} deeVee'))

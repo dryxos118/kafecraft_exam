@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kafecraft_exam/firebase_options.dart';
 import 'package:kafecraft_exam/provider/firebase_auth_provider.dart';
 import 'package:kafecraft_exam/router/router.dart';
+import 'package:kafecraft_exam/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,11 @@ class MyApp extends HookConsumerWidget {
     return ProviderScope(
       child: MaterialApp.router(
         title: 'Flutter Quiz Exam',
+        // theme
+        theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: MaterialTheme.lightMediumContrastScheme()),
+        themeMode: ThemeMode.light,
         // Locale
         locale: const Locale('fr', 'fr'),
         debugShowCheckedModeBanner: false,
