@@ -21,6 +21,10 @@ class Farme extends HookConsumerWidget {
       return null;
     }, []);
 
+    if (exploitation == null || player == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -37,24 +41,33 @@ class Farme extends HookConsumerWidget {
                     builder: (context) => const AddFieldDialog(),
                   )
                 },
-                child: const Text('Ajouter un Champ (15 deeVee)'),
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                ),
+                child: Text(
+                  'Ajouter un Champ${exploitation.fields.length >= 4 ? ' (15 DeeVee)' : ' (Gratuit)'}',
+                ),
               ),
               const Spacer(),
-              Chip(label: Text('${player!.deeVee} deeVee'))
+              Chip(
+                label: Text('${player.deeVee} deeVee'),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
             ],
           ),
         ),
         const Divider(),
         Expanded(
-          child: exploitation == null || exploitation.fields.isEmpty
+          child: exploitation.fields.isEmpty
               ? const Center(child: Text('Aucune exploitation trouvée.'))
               : FieldList(fields: exploitation.fields),
         ),
       ],
     );
   }
-}
-
-class AddFieldBottomSheet {
-  const AddFieldBottomSheet();
 }

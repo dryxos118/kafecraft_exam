@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kafecraft_exam/data/cafe_data.dart';
 import 'package:kafecraft_exam/model/cafe_type.dart';
 import 'package:kafecraft_exam/model/stock.dart';
 import 'package:kafecraft_exam/provider/player_provider.dart';
 
 final stockStreamProvider =
-    StreamNotifierProvider<StockStreamNotifier, List<Stock?>>(
+    StreamNotifierProvider<StockStreamNotifier, List<Stock>>(
   StockStreamNotifier.new,
 );
 
-class StockStreamNotifier extends StreamNotifier<List<Stock?>> {
+class StockStreamNotifier extends StreamNotifier<List<Stock>> {
   @override
-  Stream<List<Stock?>> build() async* {
+  Stream<List<Stock>> build() async* {
     final player = ref.watch(playerNotifier);
     if (player == null) {
       yield [];
@@ -19,33 +20,32 @@ class StockStreamNotifier extends StreamNotifier<List<Stock?>> {
     }
 
     final firestore = FirebaseFirestore.instance;
-    final collection = firestore.collection('stocks').doc(player.id);
+    final docRef = firestore.collection('stocks').doc(player.id);
 
-    // Vérifier l'existence du document stock
-    final snapshot = await collection.get();
+    final snapshot = await docRef.get();
     if (!snapshot.exists) {
-      // Créer le document vide si nécessaire
       await _initializeStockInFirestore(player.id!);
     }
 
-    // Écouter les mises à jour du document stock
-    yield* collection.snapshots().map((snapshot) {
+    yield* docRef.snapshots().map((snapshot) {
       if (!snapshot.exists) return [];
       final data = snapshot.data();
       final List<dynamic> stockList = data?['stocks'] ?? [];
-      return stockList
-          .where((e) => e != null)
-          .map((e) => Stock.fromMap(e))
-          .toList();
+
+      return stockList.map((e) => Stock.fromMap(e)).whereType<Stock>().toList();
     });
   }
 
   Future<void> _initializeStockInFirestore(String playerId) async {
     final firestore = FirebaseFirestore.instance;
+
+    final defaultStocks = cafeTypes.map((type) {
+      return Stock(cafeType: type.name, grainWeight: 0.0).toMap();
+    }).toList();
+
     await firestore.collection('stocks').doc(playerId).set({
-      'stocks': [], // Liste vide pour l'initialisation
+      'stocks': defaultStocks,
     });
-    print("Stock document créé pour l'utilisateur: $playerId");
   }
 
   Future<void> addGrains(CafeType cafeType) async {
@@ -54,21 +54,40 @@ class StockStreamNotifier extends StreamNotifier<List<Stock?>> {
 
     final dryWeight = cafeType.fruitWeight * (1 - 0.0458);
 
-    final existingStock = state.value?.firstWhere(
-      (stock) => stock?.cafeType == cafeType.name,
+    final existingStock = state.value!.firstWhere(
+      (stock) => stock.cafeType == cafeType.name,
       orElse: () => Stock(cafeType: cafeType.name, grainWeight: 0.0),
     );
 
-    final updatedStock = existingStock?.copyWith(
-      grainWeight: (existingStock.grainWeight) + dryWeight,
+    final updatedStock = existingStock.copyWith(
+      grainWeight: double.parse(
+        (existingStock.grainWeight + dryWeight).toStringAsFixed(3),
+      ),
     );
+
+    final updatedStocks = [
+      ...state.value!.where((s) => s.cafeType != cafeType.name),
+      updatedStock,
+    ];
+
+    state = AsyncValue.data(updatedStocks);
+
+    await _saveStockToFirestore(player.id!, updatedStocks);
+  }
+
+  Future<void> consumeGrains(Map<String, double> consumedGrains) async {
+    final player = ref.read(playerNotifier);
+    if (player == null) return;
 
     final currentStocks = state.value ?? [];
 
-    final updatedStocks = [
-      ...currentStocks.where((stock) => stock?.cafeType != cafeType.name),
-      updatedStock,
-    ].whereType<Stock?>().toList();
+    final updatedStocks = currentStocks.map((stock) {
+      final used = consumedGrains[stock.cafeType] ?? 0.0;
+      final remaining = (stock.grainWeight - used).clamp(0.0, double.infinity);
+
+      return stock.copyWith(
+          grainWeight: double.parse(remaining.toStringAsFixed(3)));
+    }).toList();
 
     state = AsyncValue.data(updatedStocks);
 
@@ -76,12 +95,9 @@ class StockStreamNotifier extends StreamNotifier<List<Stock?>> {
   }
 
   Future<void> _saveStockToFirestore(
-      String playerId, List<Stock?> stocks) async {
+      String playerId, List<Stock> stocks) async {
     final firestore = FirebaseFirestore.instance;
-    final stockList = stocks
-        .where((stock) => stock != null)
-        .map((stock) => stock?.toMap())
-        .toList();
+    final stockList = stocks.map((stock) => stock.toMap()).toList();
 
     await firestore.collection('stocks').doc(playerId).set({
       'stocks': stockList,

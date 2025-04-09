@@ -30,10 +30,8 @@ class PlayerNotifier extends StateNotifier<Player?> {
 
   Future<void> createNewUser(Player user) async {
     try {
-      var test = await FirebaseFirestore.instance
-          .collection('players')
-          .add(user.toMap());
-      state = user.copyWith(id: test.id);
+      await FirebaseFirestore.instance.collection('players').add(user.toMap());
+      state = user;
     } catch (e) {
       print(e);
     }

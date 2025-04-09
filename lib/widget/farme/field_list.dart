@@ -12,19 +12,23 @@ class FieldList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final time = ref.watch(timeProvider);
+    ref.watch(timeProvider);
+
     return ListView.builder(
       padding: const EdgeInsets.all(8),
       itemCount: fields.length,
       itemBuilder: (context, index) {
         final field = fields[index];
-        final int readyToHarvest =
+
+        final readyToHarvest =
             field.plants.where((plant) => plant.isReadyForHarvest).length;
-        final int inProgress = field.plants
+
+        final inProgress = field.plants
             .where(
                 (plant) => plant.cafeType != null && !plant.isReadyForHarvest)
             .length;
-        final int emptySlots =
+
+        final emptySlots =
             field.plants.where((plant) => plant.cafeType == null).length;
 
         return Padding(

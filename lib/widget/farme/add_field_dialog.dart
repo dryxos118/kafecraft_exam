@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kafecraft_exam/provider/exploitation_provider.dart';
+import 'package:kafecraft_exam/service/snackbar_service.dart';
 
 class AddFieldDialog extends HookConsumerWidget {
   const AddFieldDialog({super.key});
@@ -8,6 +9,19 @@ class AddFieldDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextEditingController nameController = TextEditingController();
+
+    void handleAddField(void Function(bool) onSubmit) {
+      final name = nameController.text;
+      if (name.isEmpty) {
+        return;
+      }
+      Future(() async {
+        final res =
+            await ref.read(exploitationProvider.notifier).addField(name);
+        onSubmit(res);
+      });
+    }
+
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Container(
@@ -62,11 +76,15 @@ class AddFieldDialog extends HookConsumerWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      String name = nameController.text;
-                      if (name.isNotEmpty) {
-                        ref.read(exploitationProvider.notifier).addField(name);
+                      handleAddField((success) {
+                        SnackbarService(context).showSnackbar(
+                          title: success
+                              ? "Champ ${nameController.text} ajouté"
+                              : "Erreur lors de l'ajout",
+                          type: success ? Type.succes : Type.danger,
+                        );
                         Navigator.of(context).pop();
-                      }
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,

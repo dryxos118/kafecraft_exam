@@ -4,6 +4,7 @@ import 'package:kafecraft_exam/model/gato.dart';
 import 'package:kafecraft_exam/model/stock.dart';
 import 'package:kafecraft_exam/data/cafe_data.dart';
 import 'package:kafecraft_exam/service/snackbar_service.dart';
+import 'package:kafecraft_exam/widget/stock/gato_stat.dart';
 
 class StockCard extends StatelessWidget {
   final Stock stock;
@@ -63,66 +64,28 @@ class StockCard extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                ElevatedButton(
-                  onPressed:
-                      stock.grainWeight >= 1.0 ? () => harvest(context) : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        stock.grainWeight >= 1.0 ? Colors.orange : Colors.grey,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text(
-                    'Assemblage',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                Text(
+                  'Sec: ${stock.grainWeight.toStringAsFixed(3)} Kg',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
                 )
               ],
             ),
             const SizedBox(height: 8),
-            Text(
-              'Grains secs: ${stock.grainWeight.toStringAsFixed(3)} Kg',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildGatoStat('Goût', cafeType.gato.gout),
-                _buildGatoStat('Amertume', cafeType.gato.amertume),
-                _buildGatoStat('Teneur', cafeType.gato.teneur),
-                _buildGatoStat('Odorat', cafeType.gato.odorat),
+                GatoStat(label: "Goût", value: cafeType.gato.gout),
+                GatoStat(label: "Amertume", value: cafeType.gato.amertume),
+                GatoStat(label: "Teneur", value: cafeType.gato.teneur),
+                GatoStat(label: "Odorat", value: cafeType.gato.odorat),
               ],
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildGatoStat(String label, int value) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          '$value / 100',
-          style: const TextStyle(fontSize: 18, color: Colors.black87),
-        ),
-      ],
     );
   }
 }

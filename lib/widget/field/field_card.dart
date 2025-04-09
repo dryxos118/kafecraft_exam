@@ -20,7 +20,7 @@ class FieldCard extends HookConsumerWidget {
 
     return Card(
       elevation: 4,
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),

@@ -62,10 +62,6 @@ final List<GoRoute> appRoutes = [
   )
 ];
 
-extension on GoRouterState {
-  get params => null;
-}
-
 Page _buildFadeTransitionPage(
     BuildContext context, GoRouterState state, Widget child) {
   return CustomTransitionPage(

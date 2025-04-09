@@ -37,7 +37,6 @@ class Field {
   });
 
   factory Field.empty(String name) {
-    // Initialiser avec 4 plantes vides et une spécialité aléatoire
     List<Plant> emptyPlants = List.generate(4, (_) => Plant.empty());
     FieldSpeciality randomSpeciality = FieldSpecialityExtension.getRandom();
     return Field(name: name, plants: emptyPlants, speciality: randomSpeciality);
