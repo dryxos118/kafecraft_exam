@@ -3,6 +3,7 @@ import 'package:kafecraft_exam/model/field.dart';
 import 'package:kafecraft_exam/model/plant.dart';
 import 'package:kafecraft_exam/model/cafe_type.dart';
 import 'package:kafecraft_exam/provider/exploitation_provider.dart';
+import 'package:kafecraft_exam/provider/player_provider.dart';
 
 final selectedFieldProvider =
     StateNotifierProvider<SelectedFieldNotifier, Field?>(
@@ -36,6 +37,9 @@ class SelectedFieldNotifier extends StateNotifier<Field?> {
     Field updatedField = state!.copyWith(plants: updatedPlants);
     state = updatedField;
 
+    await ref
+        .read(playerNotifier.notifier)
+        .addOrRemoveDeeVee(cafeType.costDeeVee, true);
     ref.read(exploitationProvider.notifier).updateField(updatedField);
   }
 

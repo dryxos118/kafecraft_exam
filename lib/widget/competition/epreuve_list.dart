@@ -73,7 +73,7 @@ class EpreuveList extends HookConsumerWidget {
                     ? "🤝 Match nul (+5 DeeVee)"
                     : outcome.userWon
                         ? "🏆 Victoire (+10 DeeVee)"
-                        : "😓 Défaite",
+                        : "😓 Défaite (+2 DeeVee)",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

@@ -106,4 +106,24 @@ class AssemblyStreamNotifier extends StreamNotifier<List<Assembly>> {
       'assemblies': updated.map((a) => a.toMap()).toList(),
     });
   }
+
+  Future<void> removeAssembly(String assemblyName) async {
+    final player = ref.read(playerNotifier);
+    if (player == null) return;
+
+    final currentAssemblies = state.value ?? [];
+
+    final updatedAssemblies = currentAssemblies
+        .where((assembly) => assembly.name != assemblyName)
+        .toList();
+
+    state = AsyncValue.data(updatedAssemblies);
+
+    await FirebaseFirestore.instance
+        .collection('assemblies')
+        .doc(player.id)
+        .update({
+      'assemblies': updatedAssemblies.map((a) => a.toMap()).toList(),
+    });
+  }
 }

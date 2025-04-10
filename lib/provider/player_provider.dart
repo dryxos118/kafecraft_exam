@@ -93,6 +93,24 @@ class PlayerNotifier extends StateNotifier<Player?> {
     }
   }
 
+  Future<void> addGoldSeed(int goldSeed) async {
+    final firestore = FirebaseFirestore.instance;
+
+    try {
+      int currentGoldSeed = state!.goldSeed;
+
+      int updatedGoldSeed = currentGoldSeed + goldSeed;
+
+      state = state!.copyWith(goldSeed: updatedGoldSeed);
+      await firestore
+          .collection("players")
+          .doc(state!.id)
+          .update(state!.toMap());
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> updatePlayerInfo(String firstName, String lastName) async {
     final firestore = FirebaseFirestore.instance;
 
