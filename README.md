@@ -8,7 +8,7 @@
 
 ## Sujet de L'exam
 
-Project Flutter avec Utilisation de Firebase
+Projet Flutter avec Utilisation de Firebase
 
 [Voir le sujet de l'exam](./assets/Sujet%20Exam%202025%20-%20Version%20B%20-%20fin%20année%20Mobile.pdf)
 
@@ -38,7 +38,7 @@ flutter pub get
 
 ### 3. Lancer un simulateur
 
-Android Studio, Xcode ou en ligne de commande :
+Android Studio ou en ligne de commande :
 
 ```bash
 flutter emulators --launch <nom-de-ton-emulateur>
@@ -85,11 +85,25 @@ lib/
 
 ## Maquete du project realiser sur Figma
 
+### Login et Register
+
+<img src="./assets/Login_Register_Figma.png" height="400">
+
+### Farme et Plant
+
+<img src="./assets/Farme_Plant_Figma.png" height="400">
+
+### Stock et Assemblage
+
+<img src="./assets/Stock_Assemblage_Figma.png" height="400">
+
 ---
 
 ## Base de données SQL
 
 La base de données est sur firebase mais voici un script sql pour l'ajouter a MySQL
+
+[Script de BDD](database.sql)
 
 ```sql
 CREATE DATABASE IF NOT EXISTS kafecraft;
